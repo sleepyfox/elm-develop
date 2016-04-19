@@ -1,0 +1,197 @@
+Elm.Maybe = Elm.Maybe || {};
+Elm.Maybe.make = function (_elm) {
+   "use strict";
+   _elm.Maybe = _elm.Maybe || {};
+   if (_elm.Maybe.values)
+   return _elm.Maybe.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Maybe";
+   var withDefault = F2(function ($default,
+   maybe) {
+      return function () {
+         switch (maybe.ctor)
+         {case "Just": return maybe._0;
+            case "Nothing":
+            return $default;}
+         _U.badCase($moduleName,
+         "between lines 53 and 55");
+      }();
+   });
+   var Nothing = {ctor: "Nothing"};
+   var oneOf = function (maybes) {
+      return function () {
+         switch (maybes.ctor)
+         {case "::": return function () {
+                 switch (maybes._0.ctor)
+                 {case "Just": return maybes._0;
+                    case "Nothing":
+                    return oneOf(maybes._1);}
+                 _U.badCase($moduleName,
+                 "between lines 72 and 74");
+              }();
+            case "[]": return Nothing;}
+         _U.badCase($moduleName,
+         "between lines 67 and 74");
+      }();
+   };
+   var andThen = F2(function (maybeValue,
+   callback) {
+      return function () {
+         switch (maybeValue.ctor)
+         {case "Just":
+            return callback(maybeValue._0);
+            case "Nothing": return Nothing;}
+         _U.badCase($moduleName,
+         "between lines 172 and 174");
+      }();
+   });
+   var Just = function (a) {
+      return {ctor: "Just",_0: a};
+   };
+   var map = F2(function (f,
+   maybe) {
+      return function () {
+         switch (maybe.ctor)
+         {case "Just":
+            return Just(f(maybe._0));
+            case "Nothing": return Nothing;}
+         _U.badCase($moduleName,
+         "between lines 84 and 86");
+      }();
+   });
+   var map2 = F3(function (func,
+   ma,
+   mb) {
+      return function () {
+         var _v11 = {ctor: "_Tuple2"
+                    ,_0: ma
+                    ,_1: mb};
+         switch (_v11.ctor)
+         {case "_Tuple2":
+            switch (_v11._0.ctor)
+              {case "Just":
+                 switch (_v11._1.ctor)
+                   {case "Just":
+                      return Just(A2(func,
+                        _v11._0._0,
+                        _v11._1._0));}
+                   break;}
+              break;}
+         return Nothing;
+      }();
+   });
+   var map3 = F4(function (func,
+   ma,
+   mb,
+   mc) {
+      return function () {
+         var _v16 = {ctor: "_Tuple3"
+                    ,_0: ma
+                    ,_1: mb
+                    ,_2: mc};
+         switch (_v16.ctor)
+         {case "_Tuple3":
+            switch (_v16._0.ctor)
+              {case "Just":
+                 switch (_v16._1.ctor)
+                   {case "Just":
+                      switch (_v16._2.ctor)
+                        {case "Just":
+                           return Just(A3(func,
+                             _v16._0._0,
+                             _v16._1._0,
+                             _v16._2._0));}
+                        break;}
+                   break;}
+              break;}
+         return Nothing;
+      }();
+   });
+   var map4 = F5(function (func,
+   ma,
+   mb,
+   mc,
+   md) {
+      return function () {
+         var _v23 = {ctor: "_Tuple4"
+                    ,_0: ma
+                    ,_1: mb
+                    ,_2: mc
+                    ,_3: md};
+         switch (_v23.ctor)
+         {case "_Tuple4":
+            switch (_v23._0.ctor)
+              {case "Just":
+                 switch (_v23._1.ctor)
+                   {case "Just":
+                      switch (_v23._2.ctor)
+                        {case "Just":
+                           switch (_v23._3.ctor)
+                             {case "Just":
+                                return Just(A4(func,
+                                  _v23._0._0,
+                                  _v23._1._0,
+                                  _v23._2._0,
+                                  _v23._3._0));}
+                             break;}
+                        break;}
+                   break;}
+              break;}
+         return Nothing;
+      }();
+   });
+   var map5 = F6(function (func,
+   ma,
+   mb,
+   mc,
+   md,
+   me) {
+      return function () {
+         var _v32 = {ctor: "_Tuple5"
+                    ,_0: ma
+                    ,_1: mb
+                    ,_2: mc
+                    ,_3: md
+                    ,_4: me};
+         switch (_v32.ctor)
+         {case "_Tuple5":
+            switch (_v32._0.ctor)
+              {case "Just":
+                 switch (_v32._1.ctor)
+                   {case "Just":
+                      switch (_v32._2.ctor)
+                        {case "Just":
+                           switch (_v32._3.ctor)
+                             {case "Just":
+                                switch (_v32._4.ctor)
+                                  {case "Just":
+                                     return Just(A5(func,
+                                       _v32._0._0,
+                                       _v32._1._0,
+                                       _v32._2._0,
+                                       _v32._3._0,
+                                       _v32._4._0));}
+                                  break;}
+                             break;}
+                        break;}
+                   break;}
+              break;}
+         return Nothing;
+      }();
+   });
+   _elm.Maybe.values = {_op: _op
+                       ,andThen: andThen
+                       ,map: map
+                       ,map2: map2
+                       ,map3: map3
+                       ,map4: map4
+                       ,map5: map5
+                       ,withDefault: withDefault
+                       ,oneOf: oneOf
+                       ,Just: Just
+                       ,Nothing: Nothing};
+   return _elm.Maybe.values;
+};

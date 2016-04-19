@@ -1,0 +1,34 @@
+Elm.Trampoline = Elm.Trampoline || {};
+Elm.Trampoline.make = function (_elm) {
+   "use strict";
+   _elm.Trampoline = _elm.Trampoline || {};
+   if (_elm.Trampoline.values)
+   return _elm.Trampoline.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Trampoline";
+   var trampoline = function (tramp) {
+      return function () {
+         switch (tramp.ctor)
+         {case "Continue":
+            return trampoline(tramp._0({ctor: "_Tuple0"}));
+            case "Done": return tramp._0;}
+         _U.badCase($moduleName,
+         "between lines 56 and 61");
+      }();
+   };
+   var Continue = function (a) {
+      return {ctor: "Continue"
+             ,_0: a};
+   };
+   var Done = function (a) {
+      return {ctor: "Done",_0: a};
+   };
+   _elm.Trampoline.values = {_op: _op
+                            ,trampoline: trampoline
+                            ,Done: Done
+                            ,Continue: Continue};
+   return _elm.Trampoline.values;
+};

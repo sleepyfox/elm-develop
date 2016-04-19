@@ -1,0 +1,939 @@
+Elm.Dict = Elm.Dict || {};
+Elm.Dict.make = function (_elm) {
+   "use strict";
+   _elm.Dict = _elm.Dict || {};
+   if (_elm.Dict.values)
+   return _elm.Dict.values;
+   var _op = {},
+   _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   $moduleName = "Dict",
+   $Basics = Elm.Basics.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Native$Debug = Elm.Native.Debug.make(_elm),
+   $String = Elm.String.make(_elm);
+   var foldr = F3(function (f,
+   acc,
+   t) {
+      return function () {
+         switch (t.ctor)
+         {case "RBEmpty_elm_builtin":
+            return acc;
+            case "RBNode_elm_builtin":
+            return A3(foldr,
+              f,
+              A3(f,
+              t._1,
+              t._2,
+              A3(foldr,f,acc,t._4)),
+              t._3);}
+         _U.badCase($moduleName,
+         "between lines 512 and 517");
+      }();
+   });
+   var keys = function (dict) {
+      return A3(foldr,
+      F3(function (key,
+      value,
+      keyList) {
+         return A2($List._op["::"],
+         key,
+         keyList);
+      }),
+      _L.fromArray([]),
+      dict);
+   };
+   var values = function (dict) {
+      return A3(foldr,
+      F3(function (key,
+      value,
+      valueList) {
+         return A2($List._op["::"],
+         value,
+         valueList);
+      }),
+      _L.fromArray([]),
+      dict);
+   };
+   var toList = function (dict) {
+      return A3(foldr,
+      F3(function (key,value,list) {
+         return A2($List._op["::"],
+         {ctor: "_Tuple2"
+         ,_0: key
+         ,_1: value},
+         list);
+      }),
+      _L.fromArray([]),
+      dict);
+   };
+   var foldl = F3(function (f,
+   acc,
+   dict) {
+      return function () {
+         switch (dict.ctor)
+         {case "RBEmpty_elm_builtin":
+            return acc;
+            case "RBNode_elm_builtin":
+            return A3(foldl,
+              f,
+              A3(f,
+              dict._1,
+              dict._2,
+              A3(foldl,f,acc,dict._3)),
+              dict._4);}
+         _U.badCase($moduleName,
+         "between lines 499 and 504");
+      }();
+   });
+   var reportRemBug = F4(function (msg,
+   c,
+   lgot,
+   rgot) {
+      return $Native$Debug.crash($String.concat(_L.fromArray(["Internal red-black tree invariant violated, expected "
+                                                             ,msg
+                                                             ," and got "
+                                                             ,$Basics.toString(c)
+                                                             ,"/"
+                                                             ,lgot
+                                                             ,"/"
+                                                             ,rgot
+                                                             ,"\nPlease report this bug to <https://github.com/elm-lang/core/issues>"])));
+   });
+   var isBBlack = function (dict) {
+      return function () {
+         switch (dict.ctor)
+         {case "RBEmpty_elm_builtin":
+            switch (dict._0.ctor)
+              {case "LBBlack": return true;}
+              break;
+            case "RBNode_elm_builtin":
+            switch (dict._0.ctor)
+              {case "BBlack": return true;}
+              break;}
+         return false;
+      }();
+   };
+   var Same = {ctor: "Same"};
+   var Remove = {ctor: "Remove"};
+   var Insert = {ctor: "Insert"};
+   var sizeHelp = F2(function (n,
+   dict) {
+      return function () {
+         switch (dict.ctor)
+         {case "RBEmpty_elm_builtin":
+            return n;
+            case "RBNode_elm_builtin":
+            return A2(sizeHelp,
+              A2(sizeHelp,n + 1,dict._4),
+              dict._3);}
+         _U.badCase($moduleName,
+         "between lines 135 and 140");
+      }();
+   });
+   var size = function (dict) {
+      return A2(sizeHelp,0,dict);
+   };
+   var get = F2(function (targetKey,
+   dict) {
+      return function () {
+         switch (dict.ctor)
+         {case "RBEmpty_elm_builtin":
+            return $Maybe.Nothing;
+            case "RBNode_elm_builtin":
+            return function () {
+                 var _v35 = A2($Basics.compare,
+                 targetKey,
+                 dict._1);
+                 switch (_v35.ctor)
+                 {case "EQ":
+                    return $Maybe.Just(dict._2);
+                    case "GT": return A2(get,
+                      targetKey,
+                      dict._4);
+                    case "LT": return A2(get,
+                      targetKey,
+                      dict._3);}
+                 _U.badCase($moduleName,
+                 "between lines 105 and 113");
+              }();}
+         _U.badCase($moduleName,
+         "between lines 100 and 113");
+      }();
+   });
+   var member = F2(function (key,
+   dict) {
+      return function () {
+         var _v36 = A2(get,key,dict);
+         switch (_v36.ctor)
+         {case "Just": return true;
+            case "Nothing": return false;}
+         _U.badCase($moduleName,
+         "between lines 119 and 124");
+      }();
+   });
+   var maxWithDefault = F3(function (k,
+   v,
+   r) {
+      return function () {
+         switch (r.ctor)
+         {case "RBEmpty_elm_builtin":
+            return {ctor: "_Tuple2"
+                   ,_0: k
+                   ,_1: v};
+            case "RBNode_elm_builtin":
+            return A3(maxWithDefault,
+              r._1,
+              r._2,
+              r._4);}
+         _U.badCase($moduleName,
+         "between lines 79 and 84");
+      }();
+   });
+   var RBEmpty_elm_builtin = function (a) {
+      return {ctor: "RBEmpty_elm_builtin"
+             ,_0: a};
+   };
+   var RBNode_elm_builtin = F5(function (a,
+   b,
+   c,
+   d,
+   e) {
+      return {ctor: "RBNode_elm_builtin"
+             ,_0: a
+             ,_1: b
+             ,_2: c
+             ,_3: d
+             ,_4: e};
+   });
+   var LBBlack = {ctor: "LBBlack"};
+   var LBlack = {ctor: "LBlack"};
+   var empty = RBEmpty_elm_builtin(LBlack);
+   var isEmpty = function (dict) {
+      return _U.eq(dict,empty);
+   };
+   var map = F2(function (f,dict) {
+      return function () {
+         switch (dict.ctor)
+         {case "RBEmpty_elm_builtin":
+            return RBEmpty_elm_builtin(LBlack);
+            case "RBNode_elm_builtin":
+            return A5(RBNode_elm_builtin,
+              dict._0,
+              dict._1,
+              A2(f,dict._1,dict._2),
+              A2(map,f,dict._3),
+              A2(map,f,dict._4));}
+         _U.badCase($moduleName,
+         "between lines 486 and 491");
+      }();
+   });
+   var NBlack = {ctor: "NBlack"};
+   var BBlack = {ctor: "BBlack"};
+   var Black = {ctor: "Black"};
+   var ensureBlackRoot = function (dict) {
+      return function () {
+         switch (dict.ctor)
+         {case "RBNode_elm_builtin":
+            switch (dict._0.ctor)
+              {case "Red":
+                 return A5(RBNode_elm_builtin,
+                   Black,
+                   dict._1,
+                   dict._2,
+                   dict._3,
+                   dict._4);}
+              break;}
+         return dict;
+      }();
+   };
+   var blackish = function (t) {
+      return function () {
+         switch (t.ctor)
+         {case "RBEmpty_elm_builtin":
+            return true;
+            case "RBNode_elm_builtin":
+            return _U.eq(t._0,
+              Black) || _U.eq(t._0,BBlack);}
+         _U.badCase($moduleName,
+         "between lines 412 and 417");
+      }();
+   };
+   var blacken = function (t) {
+      return function () {
+         switch (t.ctor)
+         {case "RBEmpty_elm_builtin":
+            return RBEmpty_elm_builtin(LBlack);
+            case "RBNode_elm_builtin":
+            return A5(RBNode_elm_builtin,
+              Black,
+              t._1,
+              t._2,
+              t._3,
+              t._4);}
+         _U.badCase($moduleName,
+         "between lines 463 and 468");
+      }();
+   };
+   var Red = {ctor: "Red"};
+   var moreBlack = function (color) {
+      return function () {
+         switch (color.ctor)
+         {case "BBlack":
+            return $Native$Debug.crash("Can\'t make a double black node more black!");
+            case "Black": return BBlack;
+            case "NBlack": return Red;
+            case "Red": return Black;}
+         _U.badCase($moduleName,
+         "between lines 274 and 285");
+      }();
+   };
+   var lessBlack = function (color) {
+      return function () {
+         switch (color.ctor)
+         {case "BBlack": return Black;
+            case "Black": return Red;
+            case "NBlack":
+            return $Native$Debug.crash("Can\'t make a negative black node less black!");
+            case "Red": return NBlack;}
+         _U.badCase($moduleName,
+         "between lines 290 and 311");
+      }();
+   };
+   var lessBlackTree = function (dict) {
+      return function () {
+         switch (dict.ctor)
+         {case "RBEmpty_elm_builtin":
+            return RBEmpty_elm_builtin(LBlack);
+            case "RBNode_elm_builtin":
+            return A5(RBNode_elm_builtin,
+              lessBlack(dict._0),
+              dict._1,
+              dict._2,
+              dict._3,
+              dict._4);}
+         _U.badCase($moduleName,
+         "between lines 314 and 319");
+      }();
+   };
+   var balancedTree = function (col) {
+      return function (xk) {
+         return function (xv) {
+            return function (yk) {
+               return function (yv) {
+                  return function (zk) {
+                     return function (zv) {
+                        return function (a) {
+                           return function (b) {
+                              return function (c) {
+                                 return function (d) {
+                                    return A5(RBNode_elm_builtin,
+                                    lessBlack(col),
+                                    yk,
+                                    yv,
+                                    A5(RBNode_elm_builtin,
+                                    Black,
+                                    xk,
+                                    xv,
+                                    a,
+                                    b),
+                                    A5(RBNode_elm_builtin,
+                                    Black,
+                                    zk,
+                                    zv,
+                                    c,
+                                    d));
+                                 };
+                              };
+                           };
+                        };
+                     };
+                  };
+               };
+            };
+         };
+      };
+   };
+   var redden = function (t) {
+      return function () {
+         switch (t.ctor)
+         {case "RBEmpty_elm_builtin":
+            return $Native$Debug.crash("can\'t make a Leaf red");
+            case "RBNode_elm_builtin":
+            return A5(RBNode_elm_builtin,
+              Red,
+              t._1,
+              t._2,
+              t._3,
+              t._4);}
+         _U.badCase($moduleName,
+         "between lines 474 and 479");
+      }();
+   };
+   var balanceHelp = function (tree) {
+      return function () {
+         switch (tree.ctor)
+         {case "RBNode_elm_builtin":
+            switch (tree._3.ctor)
+              {case "RBNode_elm_builtin":
+                 switch (tree._3._0.ctor)
+                   {case "Red":
+                      switch (tree._3._3.ctor)
+                        {case "RBNode_elm_builtin":
+                           switch (tree._3._3._0.ctor)
+                             {case "Red":
+                                return balancedTree(tree._0)(tree._3._3._1)(tree._3._3._2)(tree._3._1)(tree._3._2)(tree._1)(tree._2)(tree._3._3._3)(tree._3._3._4)(tree._3._4)(tree._4);}
+                             break;}
+                        switch (tree._3._4.ctor)
+                        {case "RBNode_elm_builtin":
+                           switch (tree._3._4._0.ctor)
+                             {case "Red":
+                                return balancedTree(tree._0)(tree._3._1)(tree._3._2)(tree._3._4._1)(tree._3._4._2)(tree._1)(tree._2)(tree._3._3)(tree._3._4._3)(tree._3._4._4)(tree._4);}
+                             break;}
+                        break;}
+                   break;}
+              switch (tree._4.ctor)
+              {case "RBNode_elm_builtin":
+                 switch (tree._4._0.ctor)
+                   {case "Red":
+                      switch (tree._4._3.ctor)
+                        {case "RBNode_elm_builtin":
+                           switch (tree._4._3._0.ctor)
+                             {case "Red":
+                                return balancedTree(tree._0)(tree._1)(tree._2)(tree._4._3._1)(tree._4._3._2)(tree._4._1)(tree._4._2)(tree._3)(tree._4._3._3)(tree._4._3._4)(tree._4._4);}
+                             break;}
+                        switch (tree._4._4.ctor)
+                        {case "RBNode_elm_builtin":
+                           switch (tree._4._4._0.ctor)
+                             {case "Red":
+                                return balancedTree(tree._0)(tree._1)(tree._2)(tree._4._1)(tree._4._2)(tree._4._4._1)(tree._4._4._2)(tree._3)(tree._4._3)(tree._4._4._3)(tree._4._4._4);}
+                             break;}
+                        break;}
+                   break;}
+              switch (tree._0.ctor)
+              {case "BBlack":
+                 switch (tree._4.ctor)
+                   {case "RBNode_elm_builtin":
+                      switch (tree._4._0.ctor)
+                        {case "NBlack":
+                           switch (tree._4._3.ctor)
+                             {case "RBNode_elm_builtin":
+                                switch (tree._4._3._0.ctor)
+                                  {case "Black":
+                                     switch (tree._4._4.ctor)
+                                       {case "RBNode_elm_builtin":
+                                          switch (tree._4._4._0.ctor)
+                                            {case "Black":
+                                               return A5(RBNode_elm_builtin,
+                                                 Black,
+                                                 tree._4._3._1,
+                                                 tree._4._3._2,
+                                                 A5(RBNode_elm_builtin,
+                                                 Black,
+                                                 tree._1,
+                                                 tree._2,
+                                                 tree._3,
+                                                 tree._4._3._3),
+                                                 A5(balance,
+                                                 Black,
+                                                 tree._4._1,
+                                                 tree._4._2,
+                                                 tree._4._3._4,
+                                                 redden(tree._4._4)));}
+                                            break;}
+                                       break;}
+                                  break;}
+                             break;}
+                        break;}
+                   switch (tree._3.ctor)
+                   {case "RBNode_elm_builtin":
+                      switch (tree._3._0.ctor)
+                        {case "NBlack":
+                           switch (tree._3._3.ctor)
+                             {case "RBNode_elm_builtin":
+                                switch (tree._3._3._0.ctor)
+                                  {case "Black":
+                                     switch (tree._3._4.ctor)
+                                       {case "RBNode_elm_builtin":
+                                          switch (tree._3._4._0.ctor)
+                                            {case "Black":
+                                               return A5(RBNode_elm_builtin,
+                                                 Black,
+                                                 tree._3._4._1,
+                                                 tree._3._4._2,
+                                                 A5(balance,
+                                                 Black,
+                                                 tree._3._1,
+                                                 tree._3._2,
+                                                 redden(tree._3._3),
+                                                 tree._3._4._3),
+                                                 A5(RBNode_elm_builtin,
+                                                 Black,
+                                                 tree._1,
+                                                 tree._2,
+                                                 tree._3._4._4,
+                                                 tree._4));}
+                                            break;}
+                                       break;}
+                                  break;}
+                             break;}
+                        break;}
+                   break;}
+              break;}
+         return tree;
+      }();
+   };
+   var balance = F5(function (c,
+   k,
+   v,
+   l,
+   r) {
+      return function () {
+         var tree = A5(RBNode_elm_builtin,
+         c,
+         k,
+         v,
+         l,
+         r);
+         return blackish(tree) ? balanceHelp(tree) : tree;
+      }();
+   });
+   var bubble = F5(function (c,
+   k,
+   v,
+   l,
+   r) {
+      return isBBlack(l) || isBBlack(r) ? A5(balance,
+      moreBlack(c),
+      k,
+      v,
+      lessBlackTree(l),
+      lessBlackTree(r)) : A5(RBNode_elm_builtin,
+      c,
+      k,
+      v,
+      l,
+      r);
+   });
+   var removeMax = F5(function (c,
+   k,
+   v,
+   l,
+   r) {
+      return function () {
+         switch (r.ctor)
+         {case "RBEmpty_elm_builtin":
+            return A3(rem,c,l,r);
+            case "RBNode_elm_builtin":
+            return A5(bubble,
+              c,
+              k,
+              v,
+              l,
+              A5(removeMax,
+              r._0,
+              r._1,
+              r._2,
+              r._3,
+              r._4));}
+         _U.badCase($moduleName,
+         "between lines 388 and 393");
+      }();
+   });
+   var rem = F3(function (c,l,r) {
+      return function () {
+         var _v161 = {ctor: "_Tuple2"
+                     ,_0: l
+                     ,_1: r};
+         switch (_v161.ctor)
+         {case "_Tuple2":
+            switch (_v161._0.ctor)
+              {case "RBEmpty_elm_builtin":
+                 switch (_v161._1.ctor)
+                   {case "RBEmpty_elm_builtin":
+                      return function () {
+                           switch (c.ctor)
+                           {case "Black":
+                              return RBEmpty_elm_builtin(LBBlack);
+                              case "Red":
+                              return RBEmpty_elm_builtin(LBlack);}
+                           return $Native$Debug.crash("cannot have bblack or nblack nodes at this point");
+                        }();
+                      case "RBNode_elm_builtin":
+                      return function () {
+                           var _v183 = {ctor: "_Tuple3"
+                                       ,_0: c
+                                       ,_1: _v161._0._0
+                                       ,_2: _v161._1._0};
+                           switch (_v183.ctor)
+                           {case "_Tuple3":
+                              switch (_v183._0.ctor)
+                                {case "Black":
+                                   switch (_v183._1.ctor)
+                                     {case "LBlack":
+                                        switch (_v183._2.ctor)
+                                          {case "Red":
+                                             return A5(RBNode_elm_builtin,
+                                               Black,
+                                               _v161._1._1,
+                                               _v161._1._2,
+                                               _v161._1._3,
+                                               _v161._1._4);}
+                                          break;}
+                                     break;}
+                                break;}
+                           return A4(reportRemBug,
+                           "Black/LBlack/Red",
+                           c,
+                           $Basics.toString(_v161._0._0),
+                           $Basics.toString(_v161._1._0));
+                        }();}
+                   break;
+                 case "RBNode_elm_builtin":
+                 switch (_v161._1.ctor)
+                   {case "RBEmpty_elm_builtin":
+                      return function () {
+                           var _v187 = {ctor: "_Tuple3"
+                                       ,_0: c
+                                       ,_1: _v161._0._0
+                                       ,_2: _v161._1._0};
+                           switch (_v187.ctor)
+                           {case "_Tuple3":
+                              switch (_v187._0.ctor)
+                                {case "Black":
+                                   switch (_v187._1.ctor)
+                                     {case "Red":
+                                        switch (_v187._2.ctor)
+                                          {case "LBlack":
+                                             return A5(RBNode_elm_builtin,
+                                               Black,
+                                               _v161._0._1,
+                                               _v161._0._2,
+                                               _v161._0._3,
+                                               _v161._0._4);}
+                                          break;}
+                                     break;}
+                                break;}
+                           return A4(reportRemBug,
+                           "Black/Red/LBlack",
+                           c,
+                           $Basics.toString(_v161._0._0),
+                           $Basics.toString(_v161._1._0));
+                        }();
+                      case "RBNode_elm_builtin":
+                      return function () {
+                           var l$ = A5(removeMax,
+                           _v161._0._0,
+                           _v161._0._1,
+                           _v161._0._2,
+                           _v161._0._3,
+                           _v161._0._4);
+                           var $ = A3(maxWithDefault,
+                           _v161._0._1,
+                           _v161._0._2,
+                           _v161._0._4),
+                           k = $._0,
+                           v = $._1;
+                           return A5(bubble,c,k,v,l$,r);
+                        }();}
+                   break;}
+              break;}
+         _U.badCase($moduleName,
+         "between lines 335 and 372");
+      }();
+   });
+   var update = F3(function (k,
+   alter,
+   dict) {
+      return function () {
+         var up = function (dict) {
+            return function () {
+               switch (dict.ctor)
+               {case "RBEmpty_elm_builtin":
+                  return function () {
+                       var _v198 = alter($Maybe.Nothing);
+                       switch (_v198.ctor)
+                       {case "Just":
+                          return {ctor: "_Tuple2"
+                                 ,_0: Insert
+                                 ,_1: A5(RBNode_elm_builtin,
+                                 Red,
+                                 k,
+                                 _v198._0,
+                                 empty,
+                                 empty)};
+                          case "Nothing":
+                          return {ctor: "_Tuple2"
+                                 ,_0: Same
+                                 ,_1: empty};}
+                       _U.badCase($moduleName,
+                       "between lines 198 and 205");
+                    }();
+                  case "RBNode_elm_builtin":
+                  return function () {
+                       var _v200 = A2($Basics.compare,
+                       k,
+                       dict._1);
+                       switch (_v200.ctor)
+                       {case "EQ": return function () {
+                               var _v201 = alter($Maybe.Just(dict._2));
+                               switch (_v201.ctor)
+                               {case "Just":
+                                  return {ctor: "_Tuple2"
+                                         ,_0: Same
+                                         ,_1: A5(RBNode_elm_builtin,
+                                         dict._0,
+                                         dict._1,
+                                         _v201._0,
+                                         dict._3,
+                                         dict._4)};
+                                  case "Nothing":
+                                  return {ctor: "_Tuple2"
+                                         ,_0: Remove
+                                         ,_1: A3(rem,
+                                         dict._0,
+                                         dict._3,
+                                         dict._4)};}
+                               _U.badCase($moduleName,
+                               "between lines 208 and 215");
+                            }();
+                          case "GT": return function () {
+                               var $ = up(dict._4),
+                               flag = $._0,
+                               newRight = $._1;
+                               return function () {
+                                  switch (flag.ctor)
+                                  {case "Insert":
+                                     return {ctor: "_Tuple2"
+                                            ,_0: Insert
+                                            ,_1: A5(balance,
+                                            dict._0,
+                                            dict._1,
+                                            dict._2,
+                                            dict._3,
+                                            newRight)};
+                                     case "Remove":
+                                     return {ctor: "_Tuple2"
+                                            ,_0: Remove
+                                            ,_1: A5(bubble,
+                                            dict._0,
+                                            dict._1,
+                                            dict._2,
+                                            dict._3,
+                                            newRight)};
+                                     case "Same":
+                                     return {ctor: "_Tuple2"
+                                            ,_0: Same
+                                            ,_1: A5(RBNode_elm_builtin,
+                                            dict._0,
+                                            dict._1,
+                                            dict._2,
+                                            dict._3,
+                                            newRight)};}
+                                  _U.badCase($moduleName,
+                                  "between lines 229 and 239");
+                               }();
+                            }();
+                          case "LT": return function () {
+                               var $ = up(dict._3),
+                               flag = $._0,
+                               newLeft = $._1;
+                               return function () {
+                                  switch (flag.ctor)
+                                  {case "Insert":
+                                     return {ctor: "_Tuple2"
+                                            ,_0: Insert
+                                            ,_1: A5(balance,
+                                            dict._0,
+                                            dict._1,
+                                            dict._2,
+                                            newLeft,
+                                            dict._4)};
+                                     case "Remove":
+                                     return {ctor: "_Tuple2"
+                                            ,_0: Remove
+                                            ,_1: A5(bubble,
+                                            dict._0,
+                                            dict._1,
+                                            dict._2,
+                                            newLeft,
+                                            dict._4)};
+                                     case "Same":
+                                     return {ctor: "_Tuple2"
+                                            ,_0: Same
+                                            ,_1: A5(RBNode_elm_builtin,
+                                            dict._0,
+                                            dict._1,
+                                            dict._2,
+                                            newLeft,
+                                            dict._4)};}
+                                  _U.badCase($moduleName,
+                                  "between lines 217 and 227");
+                               }();
+                            }();}
+                       _U.badCase($moduleName,
+                       "between lines 206 and 239");
+                    }();}
+               _U.badCase($moduleName,
+               "between lines 195 and 239");
+            }();
+         };
+         var $ = up(dict),
+         flag = $._0,
+         updatedDict = $._1;
+         return function () {
+            switch (flag.ctor)
+            {case "Insert":
+               return ensureBlackRoot(updatedDict);
+               case "Remove":
+               return blacken(updatedDict);
+               case "Same":
+               return updatedDict;}
+            _U.badCase($moduleName,
+            "between lines 242 and 250");
+         }();
+      }();
+   });
+   var insert = F3(function (key,
+   value,
+   dict) {
+      return A3(update,
+      key,
+      $Basics.always($Maybe.Just(value)),
+      dict);
+   });
+   var singleton = F2(function (key,
+   value) {
+      return A3(insert,
+      key,
+      value,
+      empty);
+   });
+   var union = F2(function (t1,
+   t2) {
+      return A3(foldl,
+      insert,
+      t2,
+      t1);
+   });
+   var fromList = function (assocs) {
+      return A3($List.foldl,
+      F2(function (_v206,dict) {
+         return function () {
+            switch (_v206.ctor)
+            {case "_Tuple2":
+               return A3(insert,
+                 _v206._0,
+                 _v206._1,
+                 dict);}
+            _U.badCase($moduleName,
+            "on line 570, column 36 to 57");
+         }();
+      }),
+      empty,
+      assocs);
+   };
+   var filter = F2(function (predicate,
+   dictionary) {
+      return function () {
+         var add = F3(function (key,
+         value,
+         dict) {
+            return A2(predicate,
+            key,
+            value) ? A3(insert,
+            key,
+            value,
+            dict) : dict;
+         });
+         return A3(foldl,
+         add,
+         empty,
+         dictionary);
+      }();
+   });
+   var intersect = F2(function (t1,
+   t2) {
+      return A2(filter,
+      F2(function (k,_v210) {
+         return function () {
+            return A2(member,k,t2);
+         }();
+      }),
+      t1);
+   });
+   var partition = F2(function (predicate,
+   dict) {
+      return function () {
+         var add = F3(function (key,
+         value,
+         _v212) {
+            return function () {
+               switch (_v212.ctor)
+               {case "_Tuple2":
+                  return A2(predicate,
+                    key,
+                    value) ? {ctor: "_Tuple2"
+                             ,_0: A3(insert,
+                             key,
+                             value,
+                             _v212._0)
+                             ,_1: _v212._1} : {ctor: "_Tuple2"
+                                              ,_0: _v212._0
+                                              ,_1: A3(insert,
+                                              key,
+                                              value,
+                                              _v212._1)};}
+               _U.badCase($moduleName,
+               "between lines 595 and 599");
+            }();
+         });
+         return A3(foldl,
+         add,
+         {ctor: "_Tuple2"
+         ,_0: empty
+         ,_1: empty},
+         dict);
+      }();
+   });
+   var remove = F2(function (key,
+   dict) {
+      return A3(update,
+      key,
+      $Basics.always($Maybe.Nothing),
+      dict);
+   });
+   var diff = F2(function (t1,t2) {
+      return A3(foldl,
+      F3(function (k,v,t) {
+         return A2(remove,k,t);
+      }),
+      t1,
+      t2);
+   });
+   _elm.Dict.values = {_op: _op
+                      ,empty: empty
+                      ,singleton: singleton
+                      ,insert: insert
+                      ,update: update
+                      ,isEmpty: isEmpty
+                      ,get: get
+                      ,remove: remove
+                      ,member: member
+                      ,size: size
+                      ,filter: filter
+                      ,partition: partition
+                      ,foldl: foldl
+                      ,foldr: foldr
+                      ,map: map
+                      ,union: union
+                      ,intersect: intersect
+                      ,diff: diff
+                      ,keys: keys
+                      ,values: values
+                      ,toList: toList
+                      ,fromList: fromList};
+   return _elm.Dict.values;
+};
