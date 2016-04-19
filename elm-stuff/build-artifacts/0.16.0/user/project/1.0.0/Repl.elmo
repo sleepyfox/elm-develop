@@ -12,6 +12,6 @@ Elm.Repl.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var tsol = {ctor: "_Tuple0"};
-   var deltron3030 = A2($Basics._op["++"],"hello"," world!");
+   var deltron3030 = 1 + 1;
    return _elm.Repl.values = {_op: _op,deltron3030: deltron3030,tsol: tsol};
 };

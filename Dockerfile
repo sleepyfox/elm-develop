@@ -5,7 +5,7 @@ RUN npm install -g elm
 ENV ELM_HOME /usr/local/lib/node_modules/elm/share
 
 # Get around the locale problem (issue #33)
-RUN apt-get -q update && apt-get install -qy locales
+RUN apt-get -q update && apt-get install -qy locales git
 RUN dpkg-reconfigure locales && locale-gen C.UTF-8 && update-locale LANG=C.UTF-8
 ENV LC_ALL C.UTF-8
 RUN elm-make --yes
