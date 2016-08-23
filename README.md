@@ -3,12 +3,12 @@ This is a simple `make` and `Docker`-based development environment for playing w
 
 To build your own copy of the image, simply:
 ```bash
-	make build
+	make build-latest
 ```
 
 To bring up a REPL:
 ```bash
-	make build repl
+	make repl
 ```
 Simples!
 
