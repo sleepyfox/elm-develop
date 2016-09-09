@@ -1,10 +1,10 @@
 FROM node:6-slim
 
 # Install Elm-lang
-RUN npm install -gq elm
+RUN npm install -gq elm elm-test
 ENV ELM_HOME /usr/local/lib/node_modules/elm/share
 
-# Get around the locale problem (issue #33)
+# Get around the locale problem (issue #33) https://github.com/elm-lang/elm-make/issues/33
 RUN apt-get -q update && apt-get install -qy locales git
 RUN dpkg-reconfigure locales && locale-gen C.UTF-8 && update-locale LANG=C.UTF-8
 ENV LC_ALL C.UTF-8
