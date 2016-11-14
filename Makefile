@@ -1,6 +1,6 @@
 .PHONY: echo build latest build-latest run repl reactor test
 PWD=$(shell pwd)
-VERSION=0.17.1
+VERSION=0.18.0
 USER=$(shell whoami)
 APP=elm
 ME=sleepyfox

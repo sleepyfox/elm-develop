@@ -1,7 +1,7 @@
-FROM node:6-slim
+FROM node:7-slim
 
 # Install Elm-lang
-RUN npm install -gq elm elm-test
+RUN npm install -gq elm@0.18.0 elm-test@0.18.0
 ENV ELM_HOME /usr/local/lib/node_modules/elm/share
 
 # Get around the locale problem (issue #33) https://github.com/elm-lang/elm-make/issues/33
